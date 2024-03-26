@@ -5,6 +5,9 @@ import cv2
 """"
 you are expected to apply a sequence of morphological operations to come up with a cleaner version 
 of the image given where the noise is removed and the characters are readable.
+
+
+I MIGHT WANT TO CHANGE THE WHITE AND BLACK PIXELS (for kernel and in the functions)
 """
 
 
