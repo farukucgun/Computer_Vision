@@ -71,9 +71,9 @@ def otsu_threshold(image):
     binary_image[image > threshold] = 255
 
     # Display the binary image
-    cv2.imshow('Binary Image', binary_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Binary Image', binary_image)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     return binary_image
     
@@ -86,8 +86,9 @@ def main():
     binary_image1 = otsu_threshold(img1)
     binary_image2 = otsu_threshold(img2)
 
-    
-
+    # Save the binary images
+    cv2.imwrite('output_images/Q4_a_otsu.png', binary_image1)
+    cv2.imwrite('output_images/Q4_b_otsu.png', binary_image2)
 
 if __name__ == "__main__":
     main()
