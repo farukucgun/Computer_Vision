@@ -1,29 +1,39 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+import math
+
+from q2_3 import create_histogram, visualize_histogram
 
 
-"""
-Discuss your results, are they always perfect? Why so, why not?
-"""
+def calculate_cum_sum(hist, value):
+    cum_sum = np.zeros_like(hist)
+    cum_sum[0] = hist[0]
+    
+    for i in range(1, 256):
+        cum_sum[i] = cum_sum[i - 1] + hist[i] * math.pow(i, value)
+
+    return cum_sum
+
 
 # find the threshold t that minimizes the weighted sum of within-class variance for the two groups
 # resulting from separating the gray levels at t
 def otsu_threshold(image):
     # Compute histogram
-    hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+    hist = create_histogram(image)
 
     # Normalize histogram
-    hist = hist.ravel() / hist.sum()
+    sum_hist = np.sum(hist)
+    hist = hist / sum_hist
 
     # Compute the cumulative sum of the normalized histogram
-    P = np.cumsum(hist)
+    P = calculate_cum_sum(hist, 0)
 
     # Compute the cumulative sum of the normalized histogram multiplied by the intensity
-    P_times_i = np.cumsum(hist * np.arange(256))
+    P_times_i = calculate_cum_sum(hist, 1)
 
     # Compute the cumulative sum of the normalized histogram multiplied by the intensity squared
-    P_times_i_squared = np.cumsum(hist * np.arange(256) ** 2)
+    P_times_i_squared = calculate_cum_sum(hist, 2)
 
     # Compute the cumulative mean
     mean = P_times_i[-1]
@@ -70,15 +80,11 @@ def otsu_threshold(image):
     binary_image = np.zeros_like(image)
     binary_image[image > threshold] = 255
 
-    # Display the binary image
-    # cv2.imshow('Binary Image', binary_image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
     return binary_image
     
 
 def main():
+    # Read the images
     img1 = cv2.imread('../images/Q4_a.png', 0)
     img2 = cv2.imread('../images/Q4_b.png', 0)
 
@@ -89,6 +95,7 @@ def main():
     # Save the binary images
     cv2.imwrite('output_images/Q4_a_otsu.png', binary_image1)
     cv2.imwrite('output_images/Q4_b_otsu.png', binary_image2)
+
 
 if __name__ == "__main__":
     main()

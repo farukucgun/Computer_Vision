@@ -2,15 +2,6 @@ import numpy as np
 import cv2
 
 
-""""
-you are expected to apply a sequence of morphological operations to come up with a cleaner version 
-of the image given where the noise is removed and the characters are readable.
-
-
-I MIGHT WANT TO CHANGE THE WHITE AND BLACK PIXELS (for kernel and in the functions)
-"""
-
-
 def threshold_image(image, threshold):
     # Apply thresholding to the image
     _, thresholded_image = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
@@ -36,7 +27,7 @@ def erosion(image, kernel):
             """
             fit the kernel in the image at this pixel
             area of interest --> area of image overlapping with the area where the kernel has pixel values 0
-            if all the pixels in the area of interest have pixel value 255, we set the center pixel to 255
+            if all the pixels in the area of interest have pixel value 0, we set the center pixel to 0
             """ 
             area_of_interest = image[i-pad_height:i+pad_height+1, j-pad_width:j+pad_width+1]
 
@@ -106,7 +97,13 @@ def main ():
     dilated_img = dilation(thresholded_img, structuring_element)
 
     # Apply erosion
-    eroded_img = erosion(thresholded_img, structuring_element)
+    eroded_img = erosion(dilated_img, structuring_element)
+
+    # Apply erosion
+    eroded_img = erosion(eroded_img, structuring_element)
+
+    # # Apply erosion
+    # eroded_img = erosion(eroded_img, structuring_element)
 
     # Save results
     cv2.imwrite('output_images/Q1_Dilated.png', dilated_img)

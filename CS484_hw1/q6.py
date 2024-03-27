@@ -2,17 +2,6 @@ import numpy as np
 import cv2
 
 
-"""
-implement a two-dimensional convolution
-operation. The function you write for convolution should take as input an image as its first argument and
-the filter as its second argument and output the result of convolving the image with the given filter in the
-spatial domain. Your function should be generic to accept any given filter or image. However, we assume that
-the images are represented as 2D matrices, i.e. multi-channel images (e.g. colour images) are not allowed.
-Likewise, filters are also 2D matrices. While implementing your function, take care of the boundaries. Use
-your convolution operator for edge detection using the Sobel and Prewitt operator
-"""
-
-
 def two_d_convolution(image, filter):
     # Get dimensions of the image and the filter
     image_height, image_width = image.shape
@@ -81,12 +70,16 @@ def main():
     # import the image
     image = cv2.imread('../images/Q6.png', 0)
 
+    # scale down the image to range [0, 1]
+    image = image / 255.0
+
     # Apply the Sobel operator
     sobel_x_image, sobel_y_image, sobel_edges = sobel_operator(image)
 
     # Save the results
     cv2.imwrite('output_images/Q6_sobel_edges_x.png', sobel_x_image)
     cv2.imwrite('output_images/Q6_sobel_edges_y.png', sobel_y_image)
+    cv2.imwrite('output_images/Q6_sobel_edges.png', sobel_edges * 255)
     
     # Apply the Prewitt operator
     prewitt_x_image, prewitt_y_image, prewitt_edges = prewitt_operator(image)
@@ -94,6 +87,7 @@ def main():
     # Save the results
     cv2.imwrite('output_images/Q6_prewitt_edges_x.png', prewitt_x_image)
     cv2.imwrite('output_images/Q6_prewitt_edges_y.png', prewitt_y_image)
+    cv2.imwrite('output_images/Q6_prewitt_edges.png', prewitt_edges * 255)
 
 
 if __name__ == "__main__":
